@@ -1,7 +1,7 @@
 import csv
 from typing import NamedTuple,List,Dict,DefaultDict,Tuple,Optional,Set
 from datetime import datetime,date,time,timedelta
-from math import radians, sin, cos, asin, sqrt,pi
+from math import radians, sin, cos, asin, sqrt, pi
 from collections import namedtuple, Counter, defaultdict
 import locale
 import statistics
@@ -126,3 +126,167 @@ def media_dias_entre_avistamientos(av:List[avistamiento],año:Optional[int]=None
         diferencia=(d2.fecha_hora.date()-d1.fecha_hora.date()).days
         dias.append(diferencia)
     return sum(dias)/len(dias)
+
+def avistamiento_por_fecha(av:List[avistamiento])->Dict[date,avistamiento]:
+    dicc=dict()
+    for a in av:
+        if a.fecha_hora.date() not in dicc:
+            dicc[a.fecha_hora.date()]=list()
+        dicc[a.fecha_hora.date()].append(a)
+    return dicc
+
+def avistamiento_por_fecha2(av:List[avistamiento])->Dict[date,List[avistamiento]]:
+    dicc=DefaultDict(list)
+    for a in av:
+        dicc[a.fecha_hora.date()].append(a)
+    return dicc
+
+def formas_por_mes(av:List[avistamiento])->Dict[str,set]:
+    dicc=dict()
+    meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    for a in av:
+        mes=meses[a.fecha_hora.month-1]
+        if mes not in dicc:
+            dicc[mes]=set()
+        dicc[mes].add(a.forma)
+    return dicc
+
+def formas_por_mes2(av:List[avistamiento])->Dict[str,set]:
+    meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    dicc=DefaultDict(set)
+    for a in av:
+        mes=meses[a.fecha_hora.month-1]
+        dicc[mes].add(a.forma)
+    return dicc
+
+def numeros_avistamientos_por_año(av:List[avistamiento])->Dict[int,int]:
+    dicc=dict()
+    for a in av:
+        if a.fecha_hora.year not in dicc:
+            dicc[a.fecha_hora.year]=0
+        dicc[a.fecha_hora.year]+=1
+    return dicc
+
+def numeros_avistamientos_por_año2(av:List[avistamiento])->Dict[int,int]:
+    return Counter(list(a.fecha_hora.year for a in av))
+
+def numeros_avistamientos_por_año3(av:List[avistamiento])->Dict[int,int]:
+    dicc=DefaultDict(int)
+    for a in av:
+        dicc[a.fecha_hora.year]+=1
+    return dicc
+
+def num_avistamientos_por_mes(av:List[avistamiento])->Dict[str,int]:
+    meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    dicc=dict()
+    for a in av:
+        mes=meses[a.fecha_hora.month-1]
+        if mes not in dicc:
+            dicc[mes]=0
+        dicc[mes]+=1
+    return dicc
+
+def num_avistamientos_por_mes2(av:List[avistamiento])->Dict[str,int]:
+    meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    return Counter(list(meses[a.fecha_hora.month-1] for a in av))
+
+def num_avistamientos_por_mes3(av:List[avistamiento])->Dict[str,int]:
+    meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
+    dicc=DefaultDict(int)
+    for a in av:
+        mes=meses[a.fecha_hora.month-1]
+        dicc[mes]+=1
+    return dicc
+
+def redondeo_coordenadas(coord:coordenadas)->coordenadas:
+    r_latitud=round(coord[0])
+    r_longitud=round(coord[1])
+    return coordenadas(r_latitud,r_longitud)
+
+def coordenadas_mas_avistamientos(av:List[avistamiento])->coordenadas:
+    dicc=dict()
+    for a in av:
+        coord=redondeo_coordenadas(a.ubicacion)
+        if coord not in dicc:
+            dicc[coord]=0
+        dicc[coord]+=1
+    return max(dicc.keys(), key=dicc.get)
+
+def coordenadas_mas_avistamientos2(av:List[avistamiento])->coordenadas:
+    contador=Counter(redondeo_coordenadas(a.ubicacion) for a in av)
+    return max(contador,key=contador.get)
+
+def coordenadas_mas_avistamientos3(av:List[avistamiento])->coordenadas:
+    dicc=DefaultDict(int)
+    for a in av:
+        coord=redondeo_coordenadas(a.ubicacion)
+        dicc[coord]+=1
+    return max(dicc,key=dicc.get)
+
+def hora_mas_avistamientos(av:List[avistamiento])->int:
+    dicc=dict()
+    for a in av:
+        if a.fecha_hora.hour not in dicc:
+            dicc[a.fecha_hora.hour]=0
+        dicc[a.fecha_hora.hour]+=1
+    return max(dicc,key=dicc.get)
+
+def hora_mas_avistamientos2(av:List[avistamiento])->int:
+    contador=Counter(a.fecha_hora.hour for a in av)
+    return max(contador,key=contador.get)
+
+def longitud_media_comentarios(av:List[avistamiento])->float:
+    lista=list(len(a.comentarios) for a in av)
+    return sum(lista)/len(lista)
+
+def longitud_media_comentarios_por_estado(av:List[avistamiento])->Dict[str,float]:
+    dicc=DefaultDict(list)
+    for a in av:
+        dicc[a.estado].append(a)
+    for c,v in dicc.items():
+        dicc[c]=longitud_media_comentarios(v)
+    return dicc
+
+def porc_avistamientos_por_forma(av:List[avistamiento])->Dict[str,float]:
+    total=len(av)
+    dicc=dict()
+    for a in av:
+        if a.forma not in dicc:
+            dicc[a.forma]=0
+        dicc[a.forma]+=1
+    for c,v in dicc.items():
+        dicc[c]=(v/total)*100
+    return dicc
+
+def porc_avistamientos_por_forma2(av:List[avistamiento])->Dict[str,float]:
+    contador=Counter(a.forma for a in av)
+    total=len(av)
+    for c,v in contador.items():
+        contador[c]=(v/total)*100
+    return contador
+
+def avistamientos_mayor_duracion_por_estado(av:List[avistamiento],n:Optional[int]=3)->Dict[str,List[avistamiento]]:
+    dicc=DefaultDict(list)
+    for a in av:
+        dicc[a.estado].append(a)
+    for c,v in dicc.items():
+        dicc[c]=sorted(v,key=lambda e:e.duracion,reverse=True)[:n]
+    return dicc
+
+def año_mas_avistamientos_forma(av:List[avistamiento])->Dict[str,int]:
+    dicc=dict()
+    for a in av:
+        if a.forma not in dicc:
+            dicc[a.forma]=list()
+            dicc[a.forma].append(a.fecha_hora.year)
+    for c,v in dicc.items():
+        dicc[c]=max(contador_años(v),key=lambda e:e[1])[0]
+    return dicc
+
+def contador_años(años:List[int])->List[Tuple[int,int]]:
+    dicc=dict()
+    for a in años:
+        if a not in dicc:
+            dicc[a]=0
+        dicc[a]+=1
+    return dicc.items()

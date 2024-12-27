@@ -57,6 +57,72 @@ def test_media_dias_entre_avistamientos(av:List[avistamiento],año:int)->None:
     print(f"La media de dias entre dos avistamientos consecutivos es: {media_dias_entre_avistamientos(av)}")
     print(f"La media de dias entre dos avistamientos consecutivos del año {año} es: {media_dias_entre_avistamientos(av,año)}")
 
+def test_avistamiento_por_fecha(av:List[avistamiento],fecha1:date,fecha2:date)->None:
+    dicc=avistamiento_por_fecha2(av)
+    fecha1_str=datetime.strftime(fecha1, '%Y-%m-%d')
+    fecha2_str=datetime.strftime(fecha2, '%Y-%m-%d')
+    print("Avistamientos por fecha:")
+    print(f"{fecha1_str}: {dicc[fecha1]}")
+    print(f"{fecha2_str}: {dicc[fecha2]}")
+
+def test_formas_por_mes(av:List[avistamiento],mes1:str,mes2:str,mes3:str)->None:
+    dicc=formas_por_mes2(av)
+    print("Formas por mes:")
+    print(f"{mes1} ({len(dicc[mes1])} formas distintas): {dicc[mes1]}")
+    print(f"{mes2} ({len(dicc[mes2])} formas distintas): {dicc[mes2]}")
+    print(f"{mes3} ({len(dicc[mes3])} formas distintas): {dicc[mes3]}")
+
+def test_numero_avistamientos_por_año(av:List[avistamiento])->None:
+    dicc=numeros_avistamientos_por_año2(av)
+    print("Numero de avistamientos por año:")
+    for c,v in dicc.items():
+        print(f"{c}: {v}")
+
+def test_num_avistamientos_por_mes(av:List[avistamiento],mes1:str,mes2:str,mes3:str)->None:
+    dicc=num_avistamientos_por_mes2(av)
+    print("Número de avistamientos por mes:")
+    print(f"{mes1}: {dicc[mes1]}")
+    print(f"{mes2}: {dicc[mes2]}")
+    print(f"{mes3}: {dicc[mes3]}")
+
+def test_coordenadas_mas_avistamientos(av:List[avistamiento])->None:
+    coord=coordenadas_mas_avistamientos2(av)
+    print(f"Coordenadas enteras de la región en la que se observaron más avistamientos: {coord}")
+
+def test_hora_mas_avistamientos(av:List[avistamiento])->None:
+    hora=hora_mas_avistamientos2(av)
+    print(f"Hora en la que se han observado más avistamientos: {hora}")
+
+def test_longitud_media_comentarios_por_estado(av:List[avistamiento],estado1:str,estado2:str,estado3:str,estado4:str)->None:
+    dicc=longitud_media_comentarios_por_estado(av)
+    print(f"Mostrando la media del tamaño de los comentarios de los avistamientos de los estados {estado1}, {estado2}, {estado3}, {estado4}")
+    print(f"{estado1}: {dicc[estado1]}")
+    print(f"{estado2}: {dicc[estado2]}")
+    print(f"{estado3}: {dicc[estado3]}")
+    print(f"{estado4}: {dicc[estado4]}")
+
+def test_porc_avistamientos_por_forma(av:List[avistamiento],f1:str,f2:str,f3:str,f4:str)->None:
+    dicc=porc_avistamientos_por_forma2(av)
+    print(f"Porcentajes de avistamientos de las formas {f1}, {f2}, {f3} y {f4}:")
+    print(f"{f1}: {dicc[f1]:.2f}%")
+    print(f"{f2}: {dicc[f2]:.2f}%")
+    print(f"{f3}: {dicc[f3]:.2f}%")
+    print(f"{f4}: {dicc[f4]:.2f}%")
+
+def test_avistamiento_mayor_duracion_por_estado(av:List[avistamiento],est1:str,est2:str,n:Optional[int]=3)->None:
+    dicc=avistamientos_mayor_duracion_por_estado(av,n)
+    print(f"Mostrando los {n} avistamientos de mayor duración de los estados {est1} y {est2} ")
+    print(f"\t{est1}")
+    for p in dicc[est1]:
+        print(f"\t\t{p}")
+    print(f"\t{est2}")
+    for j in dicc[est2]:
+        print(f"\t\t{j}")
+
+def test_año_mas_avistamientos_forma(av:List[avistamiento],forma:str)->None:
+    dicc=año_mas_avistamientos_forma(av)
+    print(f"Año con más avistamientos de tipo {forma}: {dicc[forma]}")
+
 if __name__=='__main__':
     ovni=lee_avistamientos('data/ovnis.csv')
     #test_lee_avistamiento(ovni)
@@ -72,3 +138,13 @@ if __name__=='__main__':
     #test_avistamiento_fechas(ovni,date(2005,5,1),date(2005,5,1))
     #test_comentario_mas_largo(ovni,'ufo',2005)
     #test_media_dias_entre_avistamientos(ovni,1979)
+    #test_avistamiento_por_fecha(ovni,date(1986,9,18),date(1986,7,20))
+    #test_formas_por_mes(ovni,'Enero','Julio','Noviembre')
+    #test_numero_avistamientos_por_año(ovni)
+    #test_num_avistamientos_por_mes(ovni,'Enero','Febrero','Marzo')
+    #test_coordenadas_mas_avistamientos(ovni)
+    #test_hora_mas_avistamientos(ovni)
+    #test_longitud_media_comentarios_por_estado(ovni,'in','nm', 'pa', 'wa')
+    #test_porc_avistamientos_por_forma(ovni,'changing', 'chevron', 'cigar', 'circle')
+    #test_avistamiento_mayor_duracion_por_estado(ovni,'in','nm')
+    test_año_mas_avistamientos_forma(ovni,'circle')

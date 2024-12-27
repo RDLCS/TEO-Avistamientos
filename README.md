@@ -848,7 +848,7 @@ El resultado del test debe ser:
 
 ### 4.5 Coordenadas con mayor número de avistamientos
 
-Función que devuelve las coordenadas redondeadas que se corresponden con la zona donde más avistamientos se han observado. Por ejemplo, si hay avistamientos en las coordenadas (40.1, -85.3), (41.13, -85.1) y (40.2, -85.4), la zona con más avistamientos corresponde a las coordenadas (40, -8) con 2 avistamientos. Implementa 3 versiones de esta función: con `dict`, con `Counter` y con `defaultdict`.
+Función que devuelve las coordenadas redondeadas que se corresponden con la zona donde más avistamientos se han observado. Por ejemplo, si hay avistamientos en las coordenadas (40.1, -85.3), (41.13, -85.1) y (40.2, -85.4), la zona con más avistamientos corresponde a las coordenadas (40, -85) con 2 avistamientos. Implementa 3 versiones de esta función: con `dict`, con `Counter` y con `defaultdict`.
 
 Define también una función auxiliar que tome una coordenada y devuelva esa coordenada redondeada. Usa la función 'round' para redondear.
 
