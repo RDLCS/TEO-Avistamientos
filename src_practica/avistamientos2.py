@@ -278,7 +278,7 @@ def año_mas_avistamientos_forma(av:List[avistamiento])->Dict[str,int]:
     for a in av:
         if a.forma not in dicc:
             dicc[a.forma]=list()
-            dicc[a.forma].append(a.fecha_hora.year)
+        dicc[a.forma].append(a.fecha_hora.year)
     for c,v in dicc.items():
         dicc[c]=max(contador_años(v),key=lambda e:e[1])[0]
     return dicc
@@ -290,3 +290,40 @@ def contador_años(años:List[int])->List[Tuple[int,int]]:
             dicc[a]=0
         dicc[a]+=1
     return dicc.items()
+
+def año_mas_avistamientos_forma2(av:List[avistamiento])->Dict[str,int]:
+    contador=DefaultDict(list)
+    for a in av:
+        contador[a.forma].append(a)
+    for c,v in contador.items():
+        nuevo_cont=Counter(j.fecha_hora.year for j in v)
+        contador[c]=max(nuevo_cont,key=nuevo_cont.get)
+    return contador
+
+def estados_mas_avistamientos(av:List[avistamiento],n:Optional[int]=5)->List[Tuple[str,int]]:
+    dicc=Counter(a.estado for a in av)
+    return sorted(dicc.items(),key=lambda e:e[1],reverse=True)[:n]
+
+def duracion_total_avistamientos_año(av:List[avistamiento],estado:str)->Dict[int,float]:
+    dicc=dict()
+    for a in av:
+        if a.estado==estado:
+            if a.fecha_hora.year not in dicc:
+                dicc[a.fecha_hora.year]=0
+            dicc[a.fecha_hora.year]+=a.duracion/3600
+    return dicc
+
+def duracion_total_avistamientos_año2(av:List[avistamiento],estado:str)->Dict[int,float]:
+    dicc=DefaultDict(int)
+    for a in av:
+        if a.estado==estado:
+            dicc[a.fecha_hora.year]+=a.duracion/3600
+    return dicc
+
+def avistamiento_mas_reciente_por_estado(av:List[avistamiento])->Dict[str,datetime]:
+    dicc=DefaultDict(list)
+    for a in av:
+        dicc[a.estado].append(a.fecha_hora)
+    for c,v in dicc.items():
+        dicc[c]=max(v)
+    return dicc

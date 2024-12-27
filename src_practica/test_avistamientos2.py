@@ -120,8 +120,24 @@ def test_avistamiento_mayor_duracion_por_estado(av:List[avistamiento],est1:str,e
         print(f"\t\t{j}")
 
 def test_año_mas_avistamientos_forma(av:List[avistamiento],forma:str)->None:
-    dicc=año_mas_avistamientos_forma(av)
+    dicc=año_mas_avistamientos_forma2(av)
     print(f"Año con más avistamientos de tipo {forma}: {dicc[forma]}")
+
+def test_estados_mas_avistamientos(av:List[avistamiento],n:Optional[int]=5)->None:
+    estados=estados_mas_avistamientos(av,n)
+    print(f"Estados con más avistamientos, de mayor a menor nº de avistamientos: {estados}")
+
+def test_duracion_total_avistamientos_año(av:List[avistamiento],estado:str)->None:
+    dicc=duracion_total_avistamientos_año2(av,estado)
+    print(f"Mostrando la duración total de los avistamientos entre 2000 y 2002 en el estado {estado}:")
+    print(f"Año 2000: {dicc[2000]} horas")
+    print(f"Año 2001: {dicc[2001]} horas")
+    print(f"Año 2002: {dicc[2002]} horas")
+
+def test_avistamiento_mas_reciente_por_estado(av:List[avistamiento],e1:str,e2:str)->None:
+    dicc=avistamiento_mas_reciente_por_estado(av)
+    print(f"Fecha del último avistamiento en {e1}: {dicc[e1]}")
+    print(f"Fecha del último avistamiento en {e2}: {dicc[e2]}")
 
 if __name__=='__main__':
     ovni=lee_avistamientos('data/ovnis.csv')
@@ -147,4 +163,7 @@ if __name__=='__main__':
     #test_longitud_media_comentarios_por_estado(ovni,'in','nm', 'pa', 'wa')
     #test_porc_avistamientos_por_forma(ovni,'changing', 'chevron', 'cigar', 'circle')
     #test_avistamiento_mayor_duracion_por_estado(ovni,'in','nm')
-    test_año_mas_avistamientos_forma(ovni,'circle')
+    #test_año_mas_avistamientos_forma(ovni,'circle')
+    #test_estados_mas_avistamientos(ovni)
+    #test_duracion_total_avistamientos_año(ovni,'ca')
+    test_avistamiento_mas_reciente_por_estado(ovni,'in','nm')
